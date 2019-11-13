@@ -1,0 +1,92 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &4580606127042262694
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1665209955821660101}
+  - component: {fileID: 7366501366499322449}
+  m_Layer: 0
+  m_Name: Enemy Spawner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1665209955821660101
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4580606127042262694}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.48030785, y: -3.6013367, z: 0.43822932}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7366501366499322449
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4580606127042262694}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 936344d1a8a7ad846a917d7ee3525ab6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _enemyPrefabs:
+  - {fileID: 2140142543932804506, guid: 1de7e6e26089d534cbb7a7a7486da436, type: 3}
+  - {fileID: 5218563049448690350, guid: 7e3f9d10e5af04542b5fe594976b2c59, type: 3}
+  - {fileID: 3547970475983067519, guid: 50399b52930521746aa9621af9bd2675, type: 3}
+  - {fileID: 1864323137069313930, guid: 4260fda15ec8bd647b46f029d4dedd19, type: 3}
+  - {fileID: 3657470771006338314, guid: 19ca77e26f3b5c646aee209d5ea8b529, type: 3}
+  _enemyScriptables:
+  - {fileID: 11400000, guid: 3d6a66671acff4647aa2bc4604594a65, type: 2}
+  - {fileID: 11400000, guid: ab1c72bec952edc40a7ed1bce5ca711f, type: 2}
+  - {fileID: 11400000, guid: a841a764290f43b498d90874d089594b, type: 2}
+  - {fileID: 11400000, guid: c7df66e78be9cab44a08a15d8752c235, type: 2}
+  - {fileID: 11400000, guid: 13d43bd763bd91f47b5e451dbd25800a, type: 2}
+  _tierColorGradient:
+    serializedVersion: 2
+    key0: {r: 1, g: 0.14633684, b: 0, a: 1}
+    key1: {r: 1, g: 1, b: 0, a: 1}
+    key2: {r: 0, g: 1, b: 0, a: 0}
+    key3: {r: 0, g: 1, b: 1, a: 0}
+    key4: {r: 0, g: 0, b: 1, a: 0}
+    key5: {r: 1, g: 0, b: 1, a: 0}
+    key6: {r: 1, g: 0, b: 0, a: 0}
+    key7: {r: 1, g: 0, b: 0, a: 0}
+    ctime0: 0
+    ctime1: 13107
+    ctime2: 26214
+    ctime3: 39321
+    ctime4: 52428
+    ctime5: 65535
+    ctime6: 65535
+    ctime7: 65535
+    atime0: 0
+    atime1: 65535
+    atime2: 0
+    atime3: 0
+    atime4: 0
+    atime5: 0
+    atime6: 0
+    atime7: 0
+    m_Mode: 1
+    m_NumColorKeys: 6
+    m_NumAlphaKeys: 2
+  _tierSprites:
+  - {fileID: 21300000, guid: a86c87d5063cc2342aa80ebbf92d4db9, type: 3}
+  - {fileID: 21300002, guid: a86c87d5063cc2342aa80ebbf92d4db9, type: 3}
+  - {fileID: 21300004, guid: a86c87d5063cc2342aa80ebbf92d4db9, type: 3}
+  - {fileID: 21300006, guid: a86c87d5063cc2342aa80ebbf92d4db9, type: 3}
+  - {fileID: 21300008, guid: a86c87d5063cc2342aa80ebbf92d4db9, type: 3}

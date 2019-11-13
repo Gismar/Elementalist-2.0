@@ -1,0 +1,51 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3573615777293131736
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3573615777293131743}
+  - component: {fileID: 7654643051189219456}
+  m_Layer: 0
+  m_Name: Orb Handler
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3573615777293131743
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3573615777293131736}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.48030785, y: -3.6013367, z: 0.43822932}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7654643051189219456
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3573615777293131736}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 43ef3a44a98a7c24fa67f7b90c75940b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _orbPrefabs:
+  - {fileID: 1556828574395303651, guid: 55f04b7d55ad409478aa5fd40667bf2f, type: 3}
+  - {fileID: 4455957227045135003, guid: cfb46f4c1102fce4e81be6b022319755, type: 3}
+  - {fileID: 1911512413441397402, guid: d0efb65258d6ee44289060c6354222b4, type: 3}
+  - {fileID: 2714872300509243053, guid: 6aba2035d42005149a7053ab85c1774e, type: 3}
+  - {fileID: 6623499683712781032, guid: 076acf923b575e14ab10a96a1a70ca66, type: 3}
