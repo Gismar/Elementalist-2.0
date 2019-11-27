@@ -27,7 +27,7 @@ namespace Elementalist.Enemies
         [SerializeField] private Gradient _healthBarGradient;
         private Rigidbody2D _rigidBody;
         private StatusEffects _statusEffects;
-        private (float invincibility, float stun, float slow) _timer;
+        private (float invincibility, float stun, float slow, float ignite) _timer;
         private float _slowStrength;
 
         protected EnemyBase Setup(Transform player)
@@ -91,6 +91,13 @@ namespace Elementalist.Enemies
                     if (_timer.invincibility < Time.time)
                         _statusEffects ^= StatusEffects.Invicibile;
                 }
+                if (_statusEffects.HasFlag(StatusEffects.Ignited))
+                {
+                    if (!_statusEffects.HasFlag(StatusEffects.Invicibile))
+                        TakeDamage(Mathf.Ceil(CurrentHealth * 0.1f));
+                    if (_timer.ignite < Time.time)
+                        _statusEffects ^= StatusEffects.Ignited;
+                }
             }
 
             MoveToPlayer();
@@ -114,6 +121,8 @@ namespace Elementalist.Enemies
                 _timer.slow = Time.time + duration;
             else if (statusEffect == StatusEffects.Stunned)
                 _timer.stun = Time.time + duration;
+            else if (statusEffect == StatusEffects.Ignited)
+                _timer.ignite = Time.time + duration;
         }
 
         public void AddSlow(float duration, float strength)

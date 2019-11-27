@@ -16,23 +16,22 @@ namespace Elementalist.Orbs
 
         public OrbHandler Initialize(Transform player)
         {
-            Transform projectileFolder = new GameObject("Projectiles").transform;
             _orbPool = new Dictionary<OrbElement, OrbBase>
             {
-                [OrbElement.Water] = CreateOrb(OrbElement.Water, player, projectileFolder),
-                [OrbElement.Fire] = CreateOrb(OrbElement.Fire, player, projectileFolder),
-                [OrbElement.Earth] = CreateOrb(OrbElement.Earth, player, projectileFolder),
-                [OrbElement.Lightning] = CreateOrb(OrbElement.Lightning, player, projectileFolder),
-                [OrbElement.Air] = CreateOrb(OrbElement.Air, player, projectileFolder)
+                [OrbElement.Water] = CreateOrb(OrbElement.Water, player),
+                [OrbElement.Fire] = CreateOrb(OrbElement.Fire, player),
+                [OrbElement.Earth] = CreateOrb(OrbElement.Earth, player),
+                [OrbElement.Lightning] = CreateOrb(OrbElement.Lightning, player),
+                [OrbElement.Air] = CreateOrb(OrbElement.Air, player)
             };
 
             _swapKeys = new Dictionary<KeyCode, OrbElement>
             {
                 [KeyCode.Q] = OrbElement.Water,
-                [KeyCode.Alpha3] = OrbElement.Fire,
-                [KeyCode.E] = OrbElement.Lightning,
-                [KeyCode.F] = OrbElement.Earth,
-                [KeyCode.V] = OrbElement.Air
+                [KeyCode.Alpha1] = OrbElement.Fire,
+                [KeyCode.Alpha2] = OrbElement.Lightning,
+                [KeyCode.Alpha3] = OrbElement.Earth,
+                [KeyCode.E] = OrbElement.Air
             };
 
             _currentOrb = _orbPool[OrbElement.Water];
@@ -43,22 +42,20 @@ namespace Elementalist.Orbs
         {
             if (_currentOrb.OrbState != OrbState.Attacking)
             {
-                var keyPressed = _swapKeys.FirstOrDefault(k => Input.GetKeyDown(k.Key));
+                KeyValuePair<KeyCode, OrbElement> keyPressed = _swapKeys.FirstOrDefault(k => Input.GetKeyDown(k.Key));
                 if (!keyPressed.Equals(default(KeyValuePair<KeyCode, OrbElement>)))
                     KeySwap(keyPressed.Value);
 
-                var scroll = Input.GetAxis("Mouse ScrollWheel");
+                float scroll = Input.GetAxis("Mouse ScrollWheel");
                 if (scroll != 0)
                     ScrollSwap(Mathf.FloorToInt(Mathf.Sign(scroll)));
             }
         }
 
-        private OrbBase CreateOrb(OrbElement orbElement, Transform player, Transform projectileFolder)
-        {
-            return Instantiate(_orbPrefabs[(int)orbElement], transform)
-                    .GetComponent<OrbBase>()
-                    .Initialize(new OrbSetup(player, orbElement), projectileFolder);
-        }
+        private OrbBase CreateOrb(OrbElement orbElement, Transform player) 
+            => Instantiate(_orbPrefabs[(int)orbElement], transform)
+                .GetComponent<OrbBase>()
+                .Initialize(new OrbSetup(player, orbElement));
 
         private void KeySwap(OrbElement orbElement)
         {

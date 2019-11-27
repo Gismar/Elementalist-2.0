@@ -13,60 +13,60 @@ namespace Elementalist.Orbs
         [SerializeField] private LineRenderer _aimLine;
         [SerializeField] private CircleCollider2D _collider;
 
-        protected override float _mainCooldown => 1.5f;
-        protected override float _specialCooldown => 4f;
-        protected override float _attackDamage => 25f;
-        protected override float _specialDamage => 10f;
+        protected  float _mainCooldown => 1.5f;
+        protected  float _specialCooldown => 4f;
+        protected  float _attackDamage => 25f;
+        protected  float _specialDamage => 10f;
 
         private const int _projectileCount = 1;
 
-        protected override void MainAttack()
+        protected void MainAttack()
         {
             _aimLine.enabled = false;
             float damage = _attackDamage; // * Orb Damage Modifier
-            (float rotation, _) = GetMouseInfo();
+            //(float rotation, _) = GetMouseInfo();
             float range = 25f;
             float length = 5f;
 
-            GetProjectileFromPool(ref _mainProjectilePool, _mainProjectilePrefab)
-                    .Initialize(transform.position, length, rotation, damage, range);
+            //GetProjectileFromPool(ref _mainProjectilePool, _mainProjectilePrefab)
+            //        .Initialize(transform.position, length, rotation, damage, range);
 
-            float x = Mathf.Cos(rotation * Mathf.Deg2Rad);
-            float y = Mathf.Sin(rotation * Mathf.Deg2Rad);
+            //float x = Mathf.Cos(rotation * Mathf.Deg2Rad);
+            //float y = Mathf.Sin(rotation * Mathf.Deg2Rad);
 
-            RaycastHit2D hit = Physics2D.Raycast(transform.position, new Vector2(x, y).normalized, length, _wallMask);
+            //RaycastHit2D hit = Physics2D.Raycast(transform.position, new Vector2(x, y).normalized, length, _wallMask);
 
-            if (hit.collider != null)
-            {
-                float distance = Vector2.Distance(hit.transform.position, transform.position);
-                transform.position = (new Vector3(x, y).normalized * distance) + transform.position;
-            }
-            else
-            {
-                transform.position = (new Vector3(x, y).normalized * length) + transform.position;
-            }
+            //if (hit.collider != null)
+            //{
+            //    float distance = Vector2.Distance(hit.transform.position, transform.position);
+            //    transform.position = (new Vector3(x, y).normalized * distance) + transform.position;
+            //}
+            //else
+            //{
+            //    transform.position = (new Vector3(x, y).normalized * length) + transform.position;
+            //}
 
-            OrbState = OrbState.Idling;
+           // OrbState = OrbState.Idling;
         }
 
 
-        protected override void SpecialAttack()
+        protected void SpecialAttack()
         {
             float damage = _specialDamage; // * Orb Damage Modifier;
             float size = 5f; // * Orb Radius Modifier;
             float duration = 8f; // * Orb Duration;
 
-            GetProjectileFromPool(ref _specialProjectilePool, _specialProjectilePrefab)
-                .Initialize(transform.position, duration, 0, damage, size);
+            //GetProjectileFromPool(ref _specialProjectilePool, _specialProjectilePrefab)
+            //    .Initialize(transform.position, duration, 0, damage, size);
 
 
-            OrbState = OrbState.Idling;
+            //OrbState = OrbState.Idling;
         }
 
-        protected override void UpdateAimLine()
+        protected void UpdateAimLine()
         {
             _aimLine.enabled = true;
-            transform.rotation = Quaternion.Euler(0, 0, GetMouseInfo().rotation - 90);
+            //transform.rotation = Quaternion.Euler(0, 0, GetMouseInfo().rotation - 90);
             _aimLine.endWidth = transform.localScale.x * _aimLine.widthMultiplier;
         }
 
@@ -80,7 +80,7 @@ namespace Elementalist.Orbs
                     if (hit.GetComponentInParent<IEnemy>() is IEnemy enemy)
                     {
                         enemy.TakeDamage(_attackDamage / hits.Length);
-                        enemy.AddEffect(StatusEffects.Stunned, 0.25f);
+                        enemy.AddEffect(StatusEffects.Stunned, 0.25f);             
                     }
                 }
             }
@@ -89,7 +89,7 @@ namespace Elementalist.Orbs
         public void ToggleInteraction (bool canInteract)
         {
             _collider.enabled = canInteract;
-            _spriteRenderer.enabled = canInteract;
+            //_spriteRenderer.enabled = canInteract;
         }
     }
 }

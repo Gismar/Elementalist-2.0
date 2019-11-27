@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using UnityEngine;
 
 namespace Elementalist
 {
@@ -12,6 +9,8 @@ namespace Elementalist
         Stunned = 1 << 1,
         Slowed = 1 << 2,
         Knockedback = 1 << 3,
-        Invicibile = 1 << 4
+        Invicibile = 1 << 4,
+        Ignited = 1 << 5,
+        Drenched = 1 << 6
     }
 }

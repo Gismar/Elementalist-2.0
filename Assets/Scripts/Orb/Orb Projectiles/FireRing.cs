@@ -37,7 +37,10 @@ namespace Elementalist.Orbs
         private void OnTriggerStay2D(Collider2D collision)
         {
             if (collision.GetComponentInParent<IEnemy>() is IEnemy enemy)
+            {
                 enemy.TakeDamage(_damage * Time.deltaTime);
+                enemy.AddEffect(StatusEffects.Ignited, 3f);
+            }
         }
     }
 }

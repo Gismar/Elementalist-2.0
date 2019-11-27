@@ -77,7 +77,7 @@ namespace Elementalist.Enemies
             float multiplier = 1 + (time * _difficulty) / 10f;
             int tier = Mathf.FloorToInt((time + _timeOffset)/ 10f - (time + _timeOffset) / 100f);
             var enemyType = (EnemyType)Random.Range(0, _enemyScriptables.Where(e => e.SpawnTime <= Time.timeSinceLevelLoad).ToArray().Length);
-            spawnTimer = time + 0.1f;// + _timeOffset + 1f/multiplier + (5 - _difficulty/2f);
+            spawnTimer = time + 1f;// + _timeOffset + 1f/multiplier + (5 - _difficulty/2f);
 
             // Enemy Setup
             GetEnemy(enemyType).Initialize(

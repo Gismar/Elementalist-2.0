@@ -1,59 +1,42 @@
-﻿using System.Reflection;
-using System.Collections.Generic;
-using UnityEngine;
-using System.Linq;
+﻿using UnityEngine;
 
 namespace Elementalist.Orbs
 {
-    public abstract class OrbBase : MonoBehaviour
+    public class OrbBase : MonoBehaviour
     {
-        #region Variables
-        public OrbState OrbState { get; protected set; }
+        public OrbState OrbState { get; private set; }
         public OrbElement OrbElement { get; private set; }
 
-        protected abstract void MainAttack();
-        protected abstract void SpecialAttack();
-        protected abstract void UpdateAimLine();
-
-        protected abstract float _mainCooldown { get; }
-        protected abstract float _specialCooldown { get; }
-        protected abstract float _attackDamage { get; }
-        protected abstract float _specialDamage { get; }
-        //Global Data Handler
-
-        [SerializeField] protected GameObject _mainProjectilePrefab;
-        [SerializeField] protected GameObject _specialProjectilePrefab;
-        [SerializeField] protected Animator _animator;
-        
-        protected Transform _player;
-        protected Transform _projectilesFolder;
-        protected Rigidbody2D _rigidbody;
-        protected SpriteRenderer _spriteRenderer;
-        protected List<Projectile> _mainProjectilePool;
-        protected List<Projectile> _specialProjectilePool;
-
-        private bool _canMainAttack;
-        private bool _canSpecialAttack;
-        private float _mainAttackTimer;
-        private float _specialAttackTimer;
+        private AbilityComponent _mainAttackComponent;
+        private AbilityComponent _specialAttackComponent;
+        private Transform _player;
+        private Rigidbody2D _rigidbody;
+        private SpriteRenderer _spriteRenderer;
         private float _idlerLerpTimer;
+        private bool _isSpecialAttacking;
 
-        private readonly Color _transparentColor = new Color(0.7f, 0.7f, 0.7f, 0.7f);
-        #endregion
-
-        public OrbBase Initialize(OrbSetup orbSetup, Transform projectileFolder)
+        public OrbBase Initialize(OrbSetup orbSetup)
         {
             _player = orbSetup.Player;
             OrbState = orbSetup.OrbState;
             OrbElement = orbSetup.OrbElement;
             _spriteRenderer = _spriteRenderer ?? GetComponent<SpriteRenderer>();
             _rigidbody = _rigidbody ?? GetComponent<Rigidbody2D>();
-            _mainProjectilePool = new List<Projectile>(1);
-            _specialProjectilePool = new List<Projectile>(1);
-            _projectilesFolder = projectileFolder;
+            _mainAttackComponent = _mainAttackComponent ?? (AbilityComponent)GetComponentInChildren<IMainAttackFlag>();
+            _specialAttackComponent = _specialAttackComponent ?? (AbilityComponent)GetComponentInChildren<ISpecialAttackFlag>();
             gameObject.SetActive(false);
 
             return this;
+        }
+
+        public void Start()
+        {
+            OrbState = OrbState.Orbiting;
+            OrbElement = OrbElement.Water;
+            _spriteRenderer = _spriteRenderer ?? GetComponent<SpriteRenderer>();
+            _rigidbody = _rigidbody ?? GetComponent<Rigidbody2D>();
+            _mainAttackComponent = _mainAttackComponent ?? (AbilityComponent)GetComponentInChildren<IMainAttackFlag>();
+            _specialAttackComponent = _specialAttackComponent ?? (AbilityComponent)GetComponentInChildren<ISpecialAttackFlag>();
         }
 
         public OrbBase Enable(Vector2 position, OrbState orbState)
@@ -66,7 +49,7 @@ namespace Elementalist.Orbs
             return this;
         }
 
-        protected virtual void Update()
+        private void Update()
         {
             switch (OrbState)
             {
@@ -93,9 +76,8 @@ namespace Elementalist.Orbs
                 }
                 case OrbState.Orbiting:
                 {
-                    _rigidbody.MovePosition(new Vector2(Mathf.Cos(Time.time), Mathf.Sin(Time.time)) 
-                                                * transform.localScale 
-                                                + (Vector2)_player.position);
+                    var pos = new Vector2(Mathf.Cos(Time.time), Mathf.Sin(Time.time));
+                    _rigidbody.MovePosition((pos * transform.localScale) + (Vector2)_player.position);
                     break;
                 }
                 case OrbState.Aiming:
@@ -104,69 +86,65 @@ namespace Elementalist.Orbs
                 }
             }
 
-            _canMainAttack = _mainAttackTimer <= Time.time;
-            _canSpecialAttack = _specialAttackTimer <= Time.time;
-
-            if (_canSpecialAttack)
-                DoSpecialAttack();
+            if (_specialAttackComponent.Predicate)
+            {
+                _isSpecialAttacking = true;
+                if (Input.GetMouseButton(1))
+                    _specialAttackComponent.MouseHeld(GetMouseInfo());
+                else if (Input.GetMouseButtonUp(1))
+                    _specialAttackComponent.MouseUp(GetMouseInfo());
+                else
+                    _isSpecialAttacking = false;
+            }
             else
-                _spriteRenderer.color = Color.Lerp(Color.white, _transparentColor, (_specialAttackTimer - Time.time) / _specialCooldown);
-
-            if (_canMainAttack)
-                DoMainAttack();
-        }
-
-        private void DoSpecialAttack()
-        {
-            if (Input.GetMouseButton(1))
             {
-                SpecialAttack();
-                SetupAttackTimer(_specialCooldown, ref _specialAttackTimer, ref _canSpecialAttack);
+                _isSpecialAttacking = false;
+            }
+
+            if (_mainAttackComponent.Predicate)
+            {
+                if (Input.GetMouseButton(0))
+                    _mainAttackComponent.MouseHeld(GetMouseInfo());
+                else if (Input.GetMouseButtonUp(0))
+                    _mainAttackComponent.MouseUp(GetMouseInfo()); 
             }
         }
 
-        private void DoMainAttack()
-        {
-            if (Input.GetMouseButton(0))
-            {
-                UpdateAimLine();
-                OrbState = OrbState.Aiming;
-            }
+        public void SetState(OrbState state) => OrbState = state;
 
-            if (Input.GetMouseButtonUp(0))
-            {
-                OrbState = OrbState.Attacking;
-                UpdateAimLine();
-                MainAttack();
-                SetupAttackTimer(_mainCooldown, ref _mainAttackTimer, ref _canMainAttack);
-            }
-        }
-
-        private void SetupAttackTimer(float delay, ref float attackTimer, ref bool canAttack)
+        private (float rotation, float distance) GetMouseInfo()
         {
-            attackTimer = Time.time + delay;
-            canAttack = false;
-        }
-
-        protected (float rotation, float distance) GetMouseInfo()
-        {
-            var mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            var direction = (mousePos - transform.position).normalized;
-            var rotation = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-            var distance = Vector2.Distance(mousePos, transform.position);
+            Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Vector3 direction = (mousePos - transform.position).normalized;
+            float rotation = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+            float distance = Vector2.Distance(mousePos, transform.position);
 
             return (rotation, distance);
         }
 
-        protected Projectile GetProjectileFromPool(ref List<Projectile> list, GameObject prefab)
+        private void OnTriggerEnter2D(Collider2D collision)
         {
-            var projectile = list.FirstOrDefault(p => !p.gameObject.activeInHierarchy);
-            if (projectile == default)
-            {
-                projectile = Instantiate(prefab, _projectilesFolder).GetComponent<Projectile>();
-                list.Add(projectile);
-            }
-            return projectile;
+            if (_isSpecialAttacking)
+                _specialAttackComponent.OnTouchEnter(collision);
+            _mainAttackComponent.OnTouchEnter(collision);
         }
+
+        private void OnTriggerStay2D(Collider2D collision)
+        {
+            if (_isSpecialAttacking)
+                _specialAttackComponent.OnTouchStay(collision);
+            _mainAttackComponent.OnTouchStay(collision);
+        }
+
+        //private Projectile GetProjectileFromPool(ref List<Projectile> list, GameObject prefab)
+        //{
+        //    var projectile = list.FirstOrDefault(p => !p.gameObject.activeInHierarchy);
+        //    if (projectile == default)
+        //    {
+        //        projectile = Instantiate(prefab, _projectilesFolder).GetComponent<Projectile>();
+        //        list.Add(projectile);
+        //    }
+        //    return projectile;
+        //}
     }
 }

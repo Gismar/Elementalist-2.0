@@ -17,12 +17,13 @@ namespace Elementalist.Orbs
         public override Projectile Initialize(Vector2 position, float duration, float rotation, float damage, float size)
         {
             _rigidbody = _rigidbody ?? GetComponent<Rigidbody2D>();
-            transform.rotation = Quaternion.Euler(0, 0, rotation);
             transform.position = position;
 
             _startPoint = position;
             _damage = damage;
-            _endPoint = transform.up * duration;
+            float sin = Mathf.Sin(Mathf.Deg2Rad * rotation);
+            float cos = Mathf.Cos(Mathf.Deg2Rad * rotation);
+            _endPoint = new Vector2(cos * duration + position.x, sin * duration + position.y);
             _travelLerp = 0;
 
             gameObject.SetActive(true);
@@ -40,7 +41,10 @@ namespace Elementalist.Orbs
         private void OnTriggerEnter2D(Collider2D collision)
         {
             if (collision.GetComponentInParent<IEnemy>() is IEnemy enemy)
+            {
                 enemy.TakeDamage(_damage);
+                enemy.AddEffect(StatusEffects.Ignited, 1f);
+            }
         }
     }
 }

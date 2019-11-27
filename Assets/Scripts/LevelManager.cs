@@ -19,7 +19,7 @@ namespace Elementalist
         {
             var map = Instantiate(_gridPrefabs[Random.Range(0, _gridPrefabs.Length)]).GetComponentsInChildren<Tilemap>().First();
             var player = Instantiate(_playerPrefab).GetComponent<Player>().Initialize(map.localBounds.center, 100f, 5f);
-            var enemySpawner = Instantiate(_enemySpawnerPrefab).GetComponent<EnemySpawner>().Initialize(1, player.transform, map);
+            var enemySpawner = Instantiate(_enemySpawnerPrefab).GetComponent<EnemySpawner>().Initialize(5, player.transform, map, 100);
             var orbHandler = Instantiate(_orbHandlerPrefab).GetComponent<OrbHandler>().Initialize(player.transform);
         }
     }

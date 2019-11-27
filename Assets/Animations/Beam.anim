@@ -22,15 +22,15 @@ AnimationClip:
         time: 0
         value: {x: 0, y: 0, z: 0}
         inSlope: {x: 0, y: 0, z: 0}
-        outSlope: {x: -4.9416056, y: 2.4528766, z: 0}
+        outSlope: {x: -3.9337845, y: 3.8679981, z: 0}
         tangentMode: 0
         weightedMode: 0
         inWeight: {x: 0, y: 0, z: 0.33333334}
         outWeight: {x: 0, y: 0, z: 0.33333334}
       - serializedVersion: 3
         time: 1
-        value: {x: -4.9416056, y: 2.4528766, z: 0}
-        inSlope: {x: -4.9416056, y: 2.4528766, z: 0}
+        value: {x: -3.9337845, y: 3.8679981, z: 0}
+        inSlope: {x: -3.9337845, y: 3.8679981, z: 0}
         outSlope: {x: 0, y: 0, z: 0}
         tangentMode: 0
         weightedMode: 0
@@ -47,15 +47,15 @@ AnimationClip:
         time: 0
         value: {x: 0, y: 0, z: 0}
         inSlope: {x: 0, y: 0, z: 0}
-        outSlope: {x: -5.055415, y: -2.208811, z: 0}
+        outSlope: {x: -5.4916463, y: -0.52715266, z: 0}
         tangentMode: 0
         weightedMode: 0
         inWeight: {x: 0, y: 0, z: 0.33333334}
         outWeight: {x: 0, y: 0, z: 0.33333334}
       - serializedVersion: 3
         time: 1
-        value: {x: -5.055415, y: -2.208811, z: 0}
-        inSlope: {x: -5.055415, y: -2.208811, z: 0}
+        value: {x: -5.4916463, y: -0.52715266, z: 0}
+        inSlope: {x: -5.4916463, y: -0.52715266, z: 0}
         outSlope: {x: 0, y: 0, z: 0}
         tangentMode: 0
         weightedMode: 0
@@ -72,15 +72,15 @@ AnimationClip:
         time: 0
         value: {x: 0, y: 0, z: 0}
         inSlope: {x: 0, y: 0, z: 0}
-        outSlope: {x: -4.9985104, y: 0.122032724, z: 0}
+        outSlope: {x: -4.7127156, y: 1.6704227, z: 0}
         tangentMode: 0
         weightedMode: 0
         inWeight: {x: 0, y: 0, z: 0.33333334}
         outWeight: {x: 0, y: 0, z: 0.33333334}
       - serializedVersion: 3
         time: 1
-        value: {x: -4.9985104, y: 0.122032724, z: 0}
-        inSlope: {x: -4.9985104, y: 0.122032724, z: 0}
+        value: {x: -4.7127156, y: 1.6704227, z: 0}
+        inSlope: {x: -4.7127156, y: 1.6704227, z: 0}
         outSlope: {x: 0, y: 0, z: 0}
         tangentMode: 0
         weightedMode: 0
