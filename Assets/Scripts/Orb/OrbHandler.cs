@@ -29,14 +29,16 @@ namespace Elementalist.Orbs
             {
                 [KeyCode.Q] = OrbElement.Water,
                 [KeyCode.Alpha1] = OrbElement.Fire,
-                [KeyCode.Alpha2] = OrbElement.Lightning,
-                [KeyCode.Alpha3] = OrbElement.Earth,
+                [KeyCode.Alpha2] = OrbElement.Earth,
+                [KeyCode.Alpha3] = OrbElement.Lightning,
                 [KeyCode.E] = OrbElement.Air
             };
 
             _currentOrb = _orbPool[OrbElement.Water];
             return this;
         }
+
+        private void Start() => KeySwap(OrbElement.Water);
 
         private void Update()
         {

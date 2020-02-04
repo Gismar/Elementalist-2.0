@@ -7,4 +7,6 @@ namespace Elementalist.Orbs
 {
     public interface ISpecialAttackFlag { }
     public interface IMainAttackFlag { }
+    public interface IAugmentFlag { }
+    public interface IPassiveFlag { }
 }

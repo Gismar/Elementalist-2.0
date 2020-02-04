@@ -39,7 +39,7 @@ namespace Elementalist.Orbs
             if (collision.GetComponentInParent<IEnemy>() is IEnemy enemy)
             {
                 enemy.TakeDamage(_damage * Time.deltaTime);
-                enemy.AddEffect(StatusEffects.Ignited, 3f);
+                _passive.Cast(Vector2.zero, enemy, null);
             }
         }
     }

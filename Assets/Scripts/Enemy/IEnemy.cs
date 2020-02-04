@@ -13,11 +13,11 @@ namespace Elementalist.Enemies
         float MaxHealth { get; set; }
         float CurrentHealth { get; set; }
         float BodyDamage { get; set; }
+        StatusEffects Effects { get; }
 
         void TakeDamage(float damage);
-        void AddEffect(StatusEffects type, float duration);
+        void AddEffect(StatusEffects type, float duration, float strength = 0);
         void AddKnockback(Vector2 velocity);
-        void AddSlow(float duration, float strength);
         void Die();
     }
 }

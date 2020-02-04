@@ -1,12 +1,18 @@
 fileFormatVersion: 2
 guid: bab8e1a47f6303b47ba48036a8d83de8
 TextureImporter:
-  fileIDToRecycleName:
-    21300000: Lightning Orb_0
-    21300002: Lightning Orb_1
-    21300004: Lightning Orb_2
+  internalIDToNameTable:
+  - first:
+      213: 21300000
+    second: Lightning Orb_0
+  - first:
+      213: 21300002
+    second: Lightning Orb_1
+  - first:
+      213: 21300004
+    second: Lightning Orb_2
   externalObjects: {}
-  serializedVersion: 9
+  serializedVersion: 10
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -61,7 +67,7 @@ TextureImporter:
   compressionQualitySet: 0
   textureFormatSet: 0
   platformSettings:
-  - serializedVersion: 2
+  - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
     maxTextureSize: 2048
     resizeAlgorithm: 0
@@ -72,7 +78,8 @@ TextureImporter:
     allowsAlphaSplitting: 0
     overridden: 0
     androidETC2FallbackOverride: 0
-  - serializedVersion: 2
+    forceMaximumCompressionQuality_BC6H_BC7: 1
+  - serializedVersion: 3
     buildTarget: Standalone
     maxTextureSize: 2048
     resizeAlgorithm: 0
@@ -83,7 +90,8 @@ TextureImporter:
     allowsAlphaSplitting: 0
     overridden: 0
     androidETC2FallbackOverride: 0
-  - serializedVersion: 2
+    forceMaximumCompressionQuality_BC6H_BC7: 1
+  - serializedVersion: 3
     buildTarget: WebGL
     maxTextureSize: 2048
     resizeAlgorithm: 0
@@ -94,6 +102,7 @@ TextureImporter:
     allowsAlphaSplitting: 0
     overridden: 0
     androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 1
   spriteSheet:
     serializedVersion: 2
     sprites:
@@ -113,6 +122,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 2164a4ea9daab744f99c8cceef0d2bfa
+      internalID: 21300000
       vertices: []
       indices: 
       edges: []
@@ -133,6 +143,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: bdc31a351ccb15a4b97cdaff56abb17d
+      internalID: 21300002
       vertices: []
       indices: 
       edges: []
@@ -153,6 +164,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 636847cebef6754489a3f3dacb0b2cee
+      internalID: 21300004
       vertices: []
       indices: 
       edges: []
@@ -161,10 +173,12 @@ TextureImporter:
     physicsShape: []
     bones: []
     spriteID: 16c6ed607c86fb244aaa0235c50fd3e3
+    internalID: 0
     vertices: []
     indices: 
     edges: []
     weights: []
+    secondaryTextures: []
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

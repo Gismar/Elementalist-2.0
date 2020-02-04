@@ -45,6 +45,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _tidalWavePrefab: {fileID: 4773014056012464282, guid: 4676fca1e503e6b46a769bde2bd9d676,
     type: 3}
+  _chance: 0
 --- !u!1 &5920043640363084054
 GameObject:
   m_ObjectHideFlags: 0
@@ -56,7 +57,7 @@ GameObject:
   - component: {fileID: 5920043640363084055}
   - component: {fileID: 5920043640363084052}
   - component: {fileID: 515325931931777900}
-  m_Layer: 11
+  m_Layer: 12
   m_Name: Pull
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -174,7 +175,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5920043640609417640}
   - component: {fileID: 5920043640609417641}
-  m_Layer: 11
+  m_Layer: 12
   m_Name: Slide
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Elementalist.Orbs
 {
-    public class MiniTidalWaveAugment : OrbAugment
+    public class MiniTidalWaveAugment : OrbAugment, IAugmentFlag
     {
         public override float CoolDown => 1f;
 
@@ -33,7 +33,7 @@ namespace Elementalist.Orbs
                         .Initialize(player.transform.position, 1f, rotation, 25, 7f);
                 }
 
-                //_timer = CoolDown + Time.time;
+                _timer = CoolDown + Time.time;
             }
         }
     }

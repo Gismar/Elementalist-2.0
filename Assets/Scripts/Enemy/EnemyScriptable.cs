@@ -11,6 +11,7 @@ namespace Elementalist.Enemies
         public Sprite Sprite;
         public float BaseSpeed;
         public float BaseHealth;
+        public float BaseDamage;
         public float SpawnTime;
         public float PointValue;
         public int SpawnAmount;

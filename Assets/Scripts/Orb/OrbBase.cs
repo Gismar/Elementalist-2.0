@@ -1,11 +1,13 @@
 ﻿using UnityEngine;
+using Elementalist.Players;
 
 namespace Elementalist.Orbs
 {
     public class OrbBase : MonoBehaviour
     {
-        public OrbState OrbState { get; private set; }
+        public OrbState OrbState { get; set; }
         public OrbElement OrbElement { get; private set; }
+        public Player Player { get; private set; }
 
         private AbilityComponent _mainAttackComponent;
         private AbilityComponent _specialAttackComponent;
@@ -15,11 +17,16 @@ namespace Elementalist.Orbs
         private float _idlerLerpTimer;
         private bool _isSpecialAttacking;
 
+        /// <summary>
+        /// Custom Constructor
+        /// </summary>
+        /// <param name="orbSetup">Orb Builder data</param>
         public OrbBase Initialize(OrbSetup orbSetup)
         {
             _player = orbSetup.Player;
             OrbState = orbSetup.OrbState;
             OrbElement = orbSetup.OrbElement;
+            Player = _player.GetComponent<Player>();
             _spriteRenderer = _spriteRenderer ?? GetComponent<SpriteRenderer>();
             _rigidbody = _rigidbody ?? GetComponent<Rigidbody2D>();
             _mainAttackComponent = _mainAttackComponent ?? (AbilityComponent)GetComponentInChildren<IMainAttackFlag>();
@@ -29,16 +36,12 @@ namespace Elementalist.Orbs
             return this;
         }
 
-        public void Start()
-        {
-            OrbState = OrbState.Orbiting;
-            OrbElement = OrbElement.Water;
-            _spriteRenderer = _spriteRenderer ?? GetComponent<SpriteRenderer>();
-            _rigidbody = _rigidbody ?? GetComponent<Rigidbody2D>();
-            _mainAttackComponent = _mainAttackComponent ?? (AbilityComponent)GetComponentInChildren<IMainAttackFlag>();
-            _specialAttackComponent = _specialAttackComponent ?? (AbilityComponent)GetComponentInChildren<ISpecialAttackFlag>();
-        }
-
+        /// <summary>
+        /// Enables the orb's gameobject and sets its position and state.
+        /// </summary>
+        /// <param name="position">Position to place the orb</param>
+        /// <param name="orbState">State to set the orb to</param>
+        /// <returns></returns>
         public OrbBase Enable(Vector2 position, OrbState orbState)
         {
             OrbState = orbState;
@@ -110,8 +113,6 @@ namespace Elementalist.Orbs
             }
         }
 
-        public void SetState(OrbState state) => OrbState = state;
-
         private (float rotation, float distance) GetMouseInfo()
         {
             Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -135,16 +136,5 @@ namespace Elementalist.Orbs
                 _specialAttackComponent.OnTouchStay(collision);
             _mainAttackComponent.OnTouchStay(collision);
         }
-
-        //private Projectile GetProjectileFromPool(ref List<Projectile> list, GameObject prefab)
-        //{
-        //    var projectile = list.FirstOrDefault(p => !p.gameObject.activeInHierarchy);
-        //    if (projectile == default)
-        //    {
-        //        projectile = Instantiate(prefab, _projectilesFolder).GetComponent<Projectile>();
-        //        list.Add(projectile);
-        //    }
-        //    return projectile;
-        //}
     }
 }

@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Elementalist.Orbs
 {
-    public class FireballShooter : AbilityComponent, IMainAttackFlag
+    public class FireballAbility : AbilityComponent, IMainAttackFlag
     {
         public override float Cooldown => 1f;
         public override float Damage => 20f;
@@ -20,10 +20,14 @@ namespace Elementalist.Orbs
             base.Start();
             _pool = new List<Projectile>();
             _aimLine = GetComponent<LineRenderer>();
+            _aimLine.enabled = false;
         }
 
         public override void MouseHeld((float rotation, float distance) mouseInfo)
         {
+            if (_orbBase.OrbState != OrbState.Attacking)
+                _orbBase.OrbState = OrbState.Aiming;
+
             _aimLine.enabled = true;
             float rotation = mouseInfo.rotation * Mathf.Deg2Rad;
             float x = Mathf.Cos(rotation) * 5f;
@@ -38,10 +42,13 @@ namespace Elementalist.Orbs
             _aimLine.enabled = false;
             float damage = Damage; // * Orb Damage Modifier;
             float angle = 360f / _fireballCount;
+
             for (int i = 0; i < _fireballCount; i++)
                 GetProjectileFromPool(ref _pool, _projectilePrefab)
-                    .Initialize(transform.position, 5f, mouseInfo.rotation - (i * angle), damage, 0);
-            _orbBase.SetState(OrbState.Idling);
+                    .Initialize(transform.position, 5f, mouseInfo.rotation - (i * angle), damage, 0)
+                    .AddPassive(_passive);
+
+            _orbBase.OrbState = OrbState.Idling;
             Timer = Time.time + Cooldown;
         }
         public override void OnTouchEnter(Collider2D collision)
@@ -49,7 +56,7 @@ namespace Elementalist.Orbs
             if (collision.GetComponentInParent<IEnemy>() is IEnemy enemy)
             {
                 enemy.TakeDamage(Damage / 2f);
-                enemy.AddEffect(StatusEffects.Ignited, 2f);
+                _passive.Cast(Vector2.zero, enemy, null);
             }
         }
         public override void OnTouchStay(Collider2D collision)
@@ -57,7 +64,7 @@ namespace Elementalist.Orbs
             if (collision.GetComponentInParent<IEnemy>() is IEnemy enemy)
             {
                 enemy.TakeDamage(Damage * Time.deltaTime);
-                enemy.AddEffect(StatusEffects.Ignited, 1f);
+                _passive.Cast(Vector2.zero, enemy, null);
             }
         }
     }

@@ -24,7 +24,7 @@ namespace Elementalist.Orbs
         private void OnTriggerStay2D(Collider2D collision)
         {
             if (collision.GetComponentInParent<IEnemy>() is IEnemy enemy)
-                enemy.AddSlow(0.1f, _strength);
+                enemy.AddEffect(StatusEffects.Slowed, 0.1f, _strength);
         }
 
         private void Update()

@@ -6,7 +6,7 @@ using Elementalist.Players;
 
 namespace Elementalist.Orbs
 {
-    public class WaterPull : AbilityComponent, ISpecialAttackFlag
+    public class WaterPullAbility : AbilityComponent, ISpecialAttackFlag
     {
         public override float Cooldown => 2f;
         public override float Damage => 40f;
@@ -16,7 +16,6 @@ namespace Elementalist.Orbs
         private Animator _animator;
         private float _charge;
         private SpriteRenderer _sprite;
-        private Player _player;
 
         protected override void Start()
         {
@@ -24,13 +23,12 @@ namespace Elementalist.Orbs
             _animator = GetComponentInParent<Animator>();
             _sprite = GetComponent<SpriteRenderer>();
             _sprite.enabled = false;
-            _player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
         }
 
         public override void MouseHeld((float rotation, float distance) mouseInfo)
         {
             if (_orbBase.OrbState != OrbState.Attacking)
-                _orbBase.SetState(OrbState.Attacking);
+                _orbBase.OrbState = OrbState.Aiming;
 
             if (!_sprite.enabled)
                 _sprite.enabled = true;
@@ -38,14 +36,12 @@ namespace Elementalist.Orbs
             _charge += Time.deltaTime;
             transform.parent.localScale = Vector2.one * _curve.Evaluate(_charge);
             transform.localScale = Vector2.one * transform.parent.localScale.magnitude;
-
-            if (_charge > _curve.keys[_curve.keys.Length - 1].time)
-                MouseUp(mouseInfo);
         }
+
         public override void MouseUp((float rotation, float distance) mouseInfo)
         {
             _animator.SetTrigger("Pull");
-            _orbBase.SetState(OrbState.Idling);
+            _orbBase.OrbState = OrbState.Idling;
 
             float curve = _curve.Evaluate(_charge);
 
@@ -63,7 +59,7 @@ namespace Elementalist.Orbs
             _charge = 0;
             _sprite.enabled = false;
             Timer = Time.time + Cooldown;
-            _augment.Cast(transform.position, null, _player);
+            _augment.Cast(transform.position, null, _orbBase.Player);
         }
 
         public override void OnTouchEnter(Collider2D collision)

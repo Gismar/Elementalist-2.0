@@ -7,7 +7,6 @@ namespace Elementalist.Orbs
 {
     public class MiniTidalWave : Projectile
     {
-        [SerializeField] private Collider2D _collider2D;
         private Vector2 _direction;
         private Rigidbody2D _rigidbody;
         private float _timer;
@@ -25,6 +24,7 @@ namespace Elementalist.Orbs
             transform.rotation = Quaternion.Euler(0, 0, rotation - 90);
             _direction = transform.up.normalized;
             _knockbackStrength = strength;
+            gameObject.SetActive(true);
 
             return this;
         }
@@ -35,8 +35,6 @@ namespace Elementalist.Orbs
 
             if (Time.time > _timer)
                 gameObject.SetActive(false);
-            else
-                Debug.Log($"Time Remaining: {Time.time - _timer}");
         }
 
         private void OnTriggerEnter2D(Collider2D collision)

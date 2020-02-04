@@ -42,8 +42,8 @@ namespace Elementalist.Orbs
         {
             if (collision.GetComponentInParent<IEnemy>() is IEnemy enemy)
             {
-                enemy.TakeDamage(_damage);
-                enemy.AddEffect(StatusEffects.Ignited, 1f);
+                enemy.TakeDamage(_damage); 
+                _passive.Cast(Vector2.zero, enemy, null);
             }
         }
     }

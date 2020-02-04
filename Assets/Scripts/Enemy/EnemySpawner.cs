@@ -5,6 +5,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using Random = UnityEngine.Random;
+using Elementalist.Config;
 
 namespace Elementalist.Enemies
 {
@@ -27,18 +28,20 @@ namespace Elementalist.Enemies
         private Dictionary<EnemyType, List<EnemyBase>> _enemyPools;
         private Dictionary<int, Vector2> _borderLocations;
         private Transform _player;
+        private EnemyDifficulty _enemyDifficulty;
+        private SpawningDifficulty _spawningDifficulty;
         private bool _isPaused;
-        private int _tier;
-        private int _difficulty;
         private readonly float _initialSpawnTime = 5f;
         private float _timeOffset;
+        private int _round;
+        private int _wave;
 
         // Custom Constructor
-        public EnemySpawner Initialize(int difficulty, Transform player, Tilemap map = null, int startingTier = 0)
+        public EnemySpawner Initialize(EnemyDifficulty enemyDifficulty, SpawningDifficulty spawningDifficulty, Transform player, Tilemap map = null, int startingTier = 0)
         {
-            _difficulty = difficulty;
+            _enemyDifficulty = enemyDifficulty;
+            _spawningDifficulty = spawningDifficulty;
             _player = player;
-
             _enemyPools = new Dictionary<EnemyType, List<EnemyBase>>();
             foreach (EnemyType enemyType in Enum.GetValues(typeof(EnemyType)))
                 _enemyPools.Add(enemyType, new List<EnemyBase>());
@@ -47,7 +50,7 @@ namespace Elementalist.Enemies
             _timeOffset = startingTier * 10f + startingTier + startingTier / 9f;
 
             StopAllCoroutines();
-            StartCoroutine(SpawnEnemy(_initialSpawnTime));
+            StartCoroutine(Round(_initialSpawnTime));
             return this;
         }
 
@@ -67,28 +70,62 @@ namespace Elementalist.Enemies
             }
         }
 
-        // Recursive coroutine that spawns enemies
-        private IEnumerator SpawnEnemy(float spawnTimer)
+        private IEnumerator Round(float timer)
         {
-            yield return new WaitUntil(() => spawnTimer <= Time.timeSinceLevelLoad);
+            yield return new WaitUntil(() => timer <= Time.timeSinceLevelLoad);
+            _round++;
+            int waveCount = Mathf.RoundToInt(Mathf.Log10(_round * _round + 100));
+            float enemyAmountMultiplier = _spawningDifficulty.EnemyAmountMultiplier;
+            for (_wave = 0; _wave < waveCount; _wave++)
+            {
+                int enemyCount = Mathf.RoundToInt(Mathf.Log10(_round * _round * enemyAmountMultiplier) + 20 * enemyAmountMultiplier);
+                var enemies = new List<EnemyBase>();
 
-            // Calculations
-            float time = Time.timeSinceLevelLoad;
-            float multiplier = 1 + (time * _difficulty) / 10f;
-            int tier = Mathf.FloorToInt((time + _timeOffset)/ 10f - (time + _timeOffset) / 100f);
-            var enemyType = (EnemyType)Random.Range(0, _enemyScriptables.Where(e => e.SpawnTime <= Time.timeSinceLevelLoad).ToArray().Length);
-            spawnTimer = time + 1f;// + _timeOffset + 1f/multiplier + (5 - _difficulty/2f);
+                for (int i = 0; i < enemyCount; i++)
+                {
+                    var enemyType = (EnemyType)Random.Range(0, _enemyScriptables.Where(e => e.SpawnTime <= Time.timeSinceLevelLoad).ToArray().Length);
+                    enemies.Add(SpawnEnemy(enemyType));
+                    yield return new WaitForSeconds(enemyCount / 30f);
+                }
+                yield return new WaitUntil(() => enemies.All(e => e.CurrentHealth <= 0f));
+                Debug.Log("Wave Over");
+            }
+            _enemyDifficulty.Update();
+            yield return StartCoroutine(Round(Time.timeSinceLevelLoad + _spawningDifficulty.RoundPauseDuration));
+        }
 
-            // Enemy Setup
-            GetEnemy(enemyType).Initialize(
-                enemyInfo: new EnemyInfo(multiplier, _enemyScriptables[(int)enemyType]),
+        private EnemyBase SpawnEnemy(EnemyType enemyType)
+        {
+            return GetEnemy(enemyType).Initialize(
+                enemyInfo: new EnemyInfo(_enemyDifficulty, _enemyScriptables[(int)enemyType], _round),
                 target: _player,
                 position: _borderLocations[Random.Range(0, _borderLocations.Count)],
-                tier: GetTierInfo(tier % (_tierSprites.Length * _tierColorGradient.colorKeys.Length))
+                tier: GetTierInfo(_round % (_tierSprites.Length * _tierColorGradient.colorKeys.Length))
             );
-
-            yield return StartCoroutine(SpawnEnemy(spawnTimer));
         }
+
+        // Recursive coroutine that spawns enemies
+        //private IEnumerator SpawnEnemy(float spawnTimer)
+        //{
+        //    yield return new WaitUntil(() => spawnTimer <= Time.timeSinceLevelLoad);
+
+        //    // Calculations
+        //    float time = Time.timeSinceLevelLoad;
+        //    _enemyDifficulty.Update();
+        //    int tier = Mathf.FloorToInt((time + _timeOffset)/ 10f - (time + _timeOffset) / 100f);
+        //    var enemyType = (EnemyType)Random.Range(0, _enemyScriptables.Where(e => e.SpawnTime <= Time.timeSinceLevelLoad).ToArray().Length);
+        //    spawnTimer = time + 1f;// + _timeOffset + 1f/multiplier + (5 - _difficulty/2f);
+
+        //    // Enemy Setup
+        //    GetEnemy(enemyType).Initialize(
+        //        enemyInfo: new EnemyInfo(_enemyDifficulty, _enemyScriptables[(int)enemyType], _round),
+        //        target: _player,
+        //        position: _borderLocations[Random.Range(0, _borderLocations.Count)],
+        //        tier: GetTierInfo(tier % (_tierSprites.Length * _tierColorGradient.colorKeys.Length))
+        //    );
+
+        //    yield return StartCoroutine(SpawnEnemy(spawnTimer));
+        //}
 
         // Gets the appropriate sprite and color based on tier
         private (Color color, Sprite sprite) GetTierInfo(int tier)
